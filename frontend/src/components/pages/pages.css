@@ -1,0 +1,7 @@
+.scoreboard-button {
+    position: absolute;
+    top: 100px;
+    right: 50px;
+    background-color: rgb(87, 102, 199);
+    color: white;
+}
