@@ -15,7 +15,7 @@ class MnistJob(db.Model):
     config = db.Column(db.JSON)
     result = db.Column(db.JSON)
     logs = db.Column(db.JSON)
-    status = db.Column(db.String(256), default="pending")
+    status = db.Column(db.String(256), default="PENDING")
 
     def __init__(self, config):
         self.config = config

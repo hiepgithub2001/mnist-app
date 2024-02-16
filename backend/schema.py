@@ -6,3 +6,4 @@ class MnistJobSchema(Schema):
     config = fields.Dict(required=True)
     result = fields.Dict(required=True)
     logs = fields.Raw(required=True)
+    status = fields.String(required=True)

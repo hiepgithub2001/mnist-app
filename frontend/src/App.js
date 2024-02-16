@@ -6,6 +6,7 @@ import ScoreBoardModal from './components/MnistJob/ScoreBoardModal';
 
 
 const Router = () => {
+
   return (
     <BrowserRouter>
       <Routes>

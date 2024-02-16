@@ -5,3 +5,4 @@ npm install react react-dom
 npm install react-bootstrap react-router-dom
 npm i socket.io socket.io-client
 npm install react-data-table-component
+npm --force install react-json-view

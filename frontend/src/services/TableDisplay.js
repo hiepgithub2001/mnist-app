@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import DataTable from 'react-data-table-component'
 
 function TableDisplay(props) {
@@ -9,6 +9,8 @@ function TableDisplay(props) {
             <DataTable
                 columns={columns}
                 data={data}
+                fixedHeader
+                pagination
             ></DataTable>
         </div>
     )

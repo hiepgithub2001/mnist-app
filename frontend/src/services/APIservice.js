@@ -1,12 +1,14 @@
 const proxy = 'http://localhost:5000'
 
 export default class APIservice {
-  static async GetMnistJob() {
+  static async GetMnistJob(body) {
+    console.log(body);
     const resp = await fetch(`${proxy}/get_mnist_job`, {
-      method: 'GET',
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
+      body: JSON.stringify(body),
       credentials: 'include',
     });
     return await resp.json();
@@ -43,6 +45,17 @@ export default class APIservice {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(body),
+      credentials: 'include',
+    });
+    return await resp.json();
+  }
+
+  static async RetryMnistJob(id) {
+    const resp = await fetch(`${proxy}/retry_mnist_job/${id}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
       credentials: 'include',
     });
     return await resp.json();

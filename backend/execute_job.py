@@ -5,7 +5,7 @@ import random
 def execute_mnist_job(id):
     mnist_jobs = MnistJob.query.get(id)
 
-    mnist_jobs.status = "running"
+    mnist_jobs.status = "RUNNING"
 
     db.session.commit()
 
@@ -15,6 +15,6 @@ def execute_mnist_job(id):
         numZ=random.randint(0, 100)
     )
 
-    mnist_jobs.status = "completed"
+    mnist_jobs.status = "DONE"
 
     db.session.commit()

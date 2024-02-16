@@ -1,0 +1,34 @@
+.status-done {
+    background-color: green;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.status-error {
+    background-color: rgb(233, 69, 69);
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.status-running {
+    background-color: rgb(41, 41, 202);
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.status-pending {
+    background-color: rgb(199, 199, 53);
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.status-unknown {
+    background-color: gray;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+}

@@ -3,7 +3,7 @@ from flask import jsonify, request, Blueprint, session
 from marshmallow import ValidationError
 from models import db, MnistJob
 from schema import MnistJobSchema
-from API.execute_job import execute_mnist_job
+from execute_job import execute_mnist_job
 
 
 app = Blueprint('mnist_job', __name__)
@@ -24,9 +24,14 @@ def validate_with(schema):
     return decorator
 
 
-@app.route('/get_mnist_job', methods=['GET'])
+@app.route('/get_mnist_job', methods=['POST'])
 def get_mnist_jobs():
-    records = MnistJob.query.all()
+    list_status = request.json['list_status']
+
+    if not list_status:
+        list_status = []
+
+    records = MnistJob.query.filter(MnistJob.status.in_(list_status)).all()
     return jsonify([mnist_schema.dump(record) for record in records])
 
 
@@ -35,6 +40,18 @@ def add_mnist_jobs():
     config = request.json['config']
 
     mnist_jobs = MnistJob(config)
+    db.session.add(mnist_jobs)
+    db.session.commit()
+
+    execute_mnist_job(mnist_jobs.id)
+
+    return mnist_schema.dump(mnist_jobs)
+
+
+@app.route('/retry_mnist_job/<id>', methods=['POST'])
+def retry_mnist_job(id):
+    mnist_jobs = MnistJob.query.get(id)
+    mnist_jobs.status = "PENDING"
     db.session.add(mnist_jobs)
     db.session.commit()
 
