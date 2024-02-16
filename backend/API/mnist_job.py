@@ -3,6 +3,7 @@ from flask import jsonify, request, Blueprint, session
 from marshmallow import ValidationError
 from models import db, MnistJob
 from schema import MnistJobSchema
+from API.execute_job import execute_mnist_job
 
 
 app = Blueprint('mnist_job', __name__)
@@ -23,13 +24,13 @@ def validate_with(schema):
     return decorator
 
 
-@app.route('/get', methods=['GET'])
+@app.route('/get_mnist_job', methods=['GET'])
 def get_mnist_jobs():
     records = MnistJob.query.all()
     return jsonify([mnist_schema.dump(record) for record in records])
 
 
-@app.route('/add', methods=['POST'])
+@app.route('/add_mnist_job', methods=['POST'])
 def add_mnist_jobs():
     config = request.json['config']
 
@@ -37,10 +38,12 @@ def add_mnist_jobs():
     db.session.add(mnist_jobs)
     db.session.commit()
 
+    execute_mnist_job(mnist_jobs.id)
+
     return mnist_schema.dump(mnist_jobs)
 
 
-@app.route('/update/<id>', methods=['PUT'])
+@app.route('/update_mnist_job/<id>', methods=['PUT'])
 def update_mnist_job(id):
     mnist_job = MnistJob.query.get(id)
     config = request.json['config']
@@ -51,7 +54,7 @@ def update_mnist_job(id):
     return mnist_schema.dump(mnist_job)
 
 
-@app.route('/delete/<id>', methods=['DELETE'])
+@app.route('/delete_mnist_job/<id>', methods=['DELETE'])
 def delete_mnist_job(id):
     mnist_job = MnistJob.query.get(id)
 

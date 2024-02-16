@@ -1,6 +1,5 @@
 from uuid import uuid4
 from flask_sqlalchemy import SQLAlchemy
-from flask import session
 
 
 db = SQLAlchemy()
@@ -16,6 +15,7 @@ class MnistJob(db.Model):
     config = db.Column(db.JSON)
     result = db.Column(db.JSON)
     logs = db.Column(db.JSON)
+    status = db.Column(db.String(256), default="pending")
 
     def __init__(self, config):
         self.config = config

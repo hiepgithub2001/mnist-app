@@ -9,3 +9,8 @@
     height: 100px;
     background: rgb(172, 152, 152);
 }
+
+.text-box {
+    margin-left: 10px;
+    margin-bottom: 30px;
+}

@@ -5,3 +5,16 @@
     background-color: rgb(87, 102, 199);
     color: white;
 }
+
+
+.tab-bar button {
+    padding: 30px;
+    width: 30%;
+    border: none;
+    background: #ddd;
+    cursor: pointer;
+}
+
+.tab-bar button.active {
+    background: #bbb;
+}
