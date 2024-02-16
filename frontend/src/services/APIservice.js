@@ -2,7 +2,6 @@ const proxy = 'http://localhost:5000'
 
 export default class APIservice {
   static async GetMnistJob(body) {
-    console.log(body);
     const resp = await fetch(`${proxy}/get_mnist_job`, {
       method: 'POST',
       headers: {
