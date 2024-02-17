@@ -81,7 +81,7 @@ def retry_mnist_job(id):
         mnist_job.related_status.status = "PENDING"
         db.session.commit()
 
-    execute_mnist_job(mnist_job.id)
+    execute_mnist_job(id)
 
     return mnist_schema.dump(mnist_job)
 
@@ -102,10 +102,15 @@ def delete_mnist_job(id):
     mnist_job = MnistJob.query.get(id)
 
     if not mnist_job:
-        return jsonify({
-            "Status": "The mnist_job is not exist!"
-        })
+        return jsonify({"Status": "The mnist_job does not exist!"}), 404
+
+    if mnist_job.related_status:
+        db.session.delete(mnist_job.related_status)
+
+    if mnist_job.related_logs:
+        db.session.delete(mnist_job.related_logs)
 
     db.session.delete(mnist_job)
     db.session.commit()
-    return mnist_schema.dump(mnist_job)
+
+    return jsonify({"Status": "MnistJob deleted successfully"}), 200

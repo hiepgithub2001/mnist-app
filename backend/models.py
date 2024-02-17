@@ -53,7 +53,7 @@ class MnistJob(db.Model):
     result = db.Column(db.JSON)
 
     related_status = db.relationship("JobStatus", backref="mnist_job", uselist=False)
-    related_logs = db.relationship("JobLogging", backref="mnist_job")
+    related_logs = db.relationship("JobLogging", backref="mnist_job", uselist=False)
     related_ml_model = db.relationship('MLModel')
 
     def __init__(self, ml_model_id, config):
