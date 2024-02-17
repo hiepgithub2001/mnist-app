@@ -27,7 +27,7 @@ function MLModel() {
                 name="model_name"
                 placeholder='Enter Model Name'
                 onChange={(e) => setModelName(e.target.value)}
-                style={{ marginLeft: '30px' }}
+                style={{ marginLeft: '30px', height: '40px', width: '200px'}}
             />
 
             <h2>Enter Code</h2>

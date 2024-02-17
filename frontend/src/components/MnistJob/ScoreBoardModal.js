@@ -13,6 +13,7 @@ function ScoreBoardModal() {
         {
             name: "Job id",
             selector: row => row.id,
+            sortable: true,
         },
         {
             name: "Model",
@@ -37,7 +38,7 @@ function ScoreBoardModal() {
             if (!markedName[key]){
                 columns.push({
                     name: key,
-                    selector: row => row.result[key] ? row.result[key] : "N/A",
+                    selector: row => row.result[key] ? row.result[key] : null,
                     sortable: true,
                 })
                 markedName[key] = true;

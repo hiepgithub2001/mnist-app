@@ -44,7 +44,7 @@ function MnistJobModal() {
             <select
                 value={MLModel.id}
                 onChange={handleSelect}
-                style={{ marginLeft: '30px' }}
+                style={{ marginLeft: '30px', height: '40px', width: '200px'}}
             >
                 <option value="" disabled>Select an option</option>
                 {listModel.map((item, index) => (
