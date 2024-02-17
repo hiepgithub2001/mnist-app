@@ -1,17 +1,5 @@
-from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
+from marshmallow_sqlalchemy import SQLAlchemyAutoSchema, fields
 from models import MLModel, MnistJob, JobLogging, JobStatus
-
-
-class MLModelSchema(SQLAlchemyAutoSchema):
-    class Meta:
-        model = MLModel
-        load_instance = True  # Optional: deserialize to model instances
-
-
-class MnistJobSchema(SQLAlchemyAutoSchema):
-    class Meta:
-        model = MnistJob
-        load_instance = True  # Optional: deserialize to model instances
 
 
 class JobLoggingSchema(SQLAlchemyAutoSchema):
@@ -24,3 +12,20 @@ class JobStatusSchema(SQLAlchemyAutoSchema):
     class Meta:
         model = JobStatus
         load_instance = True  # Optional: deserialize to model instances
+
+
+class MnistJobSchema(SQLAlchemyAutoSchema):
+    class Meta:
+        model = MnistJob
+        load_instance = True  # Optional: deserialize to model instances
+
+    related_status = fields.Nested(JobStatusSchema)
+    related_logs = fields.Nested(JobLoggingSchema, many=True)
+
+
+class MLModelSchema(SQLAlchemyAutoSchema):
+    class Meta:
+        model = MLModel
+        load_instance = True  # Optional: deserialize to model instances
+        
+    related_mnist_job = fields.Nested(MnistJobSchema, many=True)

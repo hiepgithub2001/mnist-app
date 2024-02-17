@@ -16,7 +16,7 @@ function ScoreBoardModal() {
         },
         {
             name: "Status",
-            selector: row => <StatusView status={row.status} />
+            selector: row => <StatusView status={row.related_status.status} />
         },
         {
             name: "Config",

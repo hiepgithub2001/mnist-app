@@ -38,6 +38,7 @@ def get_mnist_jobs():
     print(list_id)
 
     records = MnistJob.query.filter(MnistJob.id.in_(list_id)).all()
+
     return jsonify([mnist_schema.dump(record) for record in records])
 
 
