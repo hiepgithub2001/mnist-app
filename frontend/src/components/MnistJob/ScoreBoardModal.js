@@ -9,7 +9,7 @@ import { JOBSTATUS } from '../constant';
 function ScoreBoardModal() {
     const [data, setData] = useState([]);
 
-    const columns = [
+    let columns = [
         {
             name: "Job id",
             selector: row => row.id,
@@ -24,17 +24,23 @@ function ScoreBoardModal() {
                 return <ReactJson src={row.config}  name={false}/>
             },
         },
-        {
-            name: "X",
-            selector: row => row.result.numX,
-            sortable: true,
-        },
-        {
-            name: "Y",
-            selector: row => row.result.numY,
-            sortable: true,
-        }
     ]
+
+
+    let markedName = {};
+    for(const item of data){
+        for(const key in item.result){
+            if (!markedName[key]){
+                columns.push({
+                    name: key,
+                    selector: row => row.result[key] ? row.result[key] : "N/A",
+                    sortable: true,
+                })
+                markedName[key] = true;
+            }
+        }
+    }
+
 
     useEffect(() => {
         APIservice.GetMnistJob({ list_status: [JOBSTATUS.DONE]}).then((data) => {
