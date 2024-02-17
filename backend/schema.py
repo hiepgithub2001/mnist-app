@@ -14,6 +14,12 @@ class JobStatusSchema(SQLAlchemyAutoSchema):
         load_instance = True  # Optional: deserialize to model instances
 
 
+class MLModelSchema(SQLAlchemyAutoSchema):
+    class Meta:
+        model = MLModel
+        load_instance = True  # Optional: deserialize to model instances
+
+
 class MnistJobSchema(SQLAlchemyAutoSchema):
     class Meta:
         model = MnistJob
@@ -21,11 +27,4 @@ class MnistJobSchema(SQLAlchemyAutoSchema):
 
     related_status = fields.Nested(JobStatusSchema)
     related_logs = fields.Nested(JobLoggingSchema, many=True)
-
-
-class MLModelSchema(SQLAlchemyAutoSchema):
-    class Meta:
-        model = MLModel
-        load_instance = True  # Optional: deserialize to model instances
-        
-    related_mnist_job = fields.Nested(MnistJobSchema, many=True)
+    related_ml_model = fields.Nested(MLModelSchema, only=('id', 'name'))

@@ -18,6 +18,10 @@ function JobDetailModal() {
             selector: row => row.id,
         },
         {
+            name: "Model",
+            selector: row => row.related_ml_model.name,
+        },
+        {
             name: "Status",
             selector: row => <StatusView status={row.related_status.status} />
         },

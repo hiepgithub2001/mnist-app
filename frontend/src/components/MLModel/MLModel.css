@@ -1,0 +1,16 @@
+.bar-tab {
+    width: 50%;
+    height: 30px;
+    background: rgb(255, 255, 255);
+}
+
+.bar-content {
+    width: 50%;
+    height: 100px;
+    background: rgb(172, 152, 152);
+}
+
+.text-box {
+    margin-left: 10px;
+    margin-bottom: 30px;
+}

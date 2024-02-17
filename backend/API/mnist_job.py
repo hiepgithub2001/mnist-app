@@ -2,13 +2,14 @@ from functools import wraps
 from flask import jsonify, request, Blueprint, session
 from marshmallow import ValidationError
 from models import db, MnistJob, MLModel, JobLogging, JobStatus
-from schema import MnistJobSchema
+from schema import MnistJobSchema, MLModelSchema
 from execute_job import execute_mnist_job
 
 
 app = Blueprint('mnist_job', __name__)
 
 mnist_schema = MnistJobSchema()
+ml_model_schema = MLModelSchema()
 
 
 def validate_with(schema):
@@ -22,6 +23,22 @@ def validate_with(schema):
             return f(*args, **kwargs)
         return decorated_function
     return decorator
+
+
+@app.route('/submit_ml_model', methods=['POST'])
+def summit_ml_model():
+    name = request.json['name']
+    model_script = request.json['model_script']
+    model = MLModel(name, model_script)
+    db.session.add(model)
+    db.session.commit()
+    return jsonify(ml_model_schema.dump(model))
+
+
+@app.route('/get_ml_model', methods=['GET'])
+def get_ml_model():
+    models = MLModel.query.all()
+    return jsonify([ml_model_schema.dump(item) for item in models])
 
 
 @app.route('/get_mnist_job', methods=['POST'])
@@ -44,9 +61,10 @@ def get_mnist_jobs():
 
 @app.route('/add_mnist_job', methods=['POST'])
 def add_mnist_jobs():
+    ml_model_id = request.json['ml_model_id']
     config = request.json['config']
 
-    mnist_jobs = MnistJob(config)
+    mnist_jobs = MnistJob(ml_model_id, config)
     db.session.add(mnist_jobs)
     db.session.commit()
 
@@ -57,14 +75,15 @@ def add_mnist_jobs():
 
 @app.route('/retry_mnist_job/<id>', methods=['POST'])
 def retry_mnist_job(id):
-    mnist_jobs = MnistJob.query.get(id)
-    mnist_jobs.status = "PENDING"
-    db.session.add(mnist_jobs)
-    db.session.commit()
+    mnist_job = MnistJob.query.get(id)
 
-    execute_mnist_job(mnist_jobs.id)
+    if mnist_job.related_status:
+        mnist_job.related_status.status = "PENDING"
+        db.session.commit()
 
-    return mnist_schema.dump(mnist_jobs)
+    execute_mnist_job(mnist_job.id)
+
+    return mnist_schema.dump(mnist_job)
 
 
 @app.route('/update_mnist_job/<id>', methods=['PUT'])

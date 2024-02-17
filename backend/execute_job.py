@@ -1,13 +1,22 @@
-from models import db, MnistJob
+from models import db, MnistJob, JobStatus
+from schema import JobStatusSchema
 import random
 
 
 def execute_mnist_job(id):
     mnist_jobs = MnistJob.query.get(id)
 
-    mnist_jobs.status = "RUNNING"
+    if mnist_jobs.related_status:
+        mnist_jobs.related_status.status = "RUNNING"
+        db.session.commit()
+    else:
+        new_status = JobStatus()
+        new_status.status = "RUNNING"
 
-    db.session.commit()
+        mnist_jobs.related_status = new_status
+
+        db.session.add(new_status)
+        db.session.commit()
 
     mnist_jobs.result = dict(
         numX=random.randint(0, 100),
@@ -23,6 +32,5 @@ def execute_mnist_job(id):
             numC=random.randint(0, 100)
         )
 
-    mnist_jobs.status = "DONE"
-
+    mnist_jobs.related_status.status = "DONE"
     db.session.commit()
