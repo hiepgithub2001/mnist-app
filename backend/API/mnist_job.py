@@ -1,7 +1,7 @@
 from functools import wraps
 from flask import jsonify, request, Blueprint, session
 from marshmallow import ValidationError
-from models import db, MnistJob
+from models import db, MnistJob, MLModel, JobLogging, JobStatus
 from schema import MnistJobSchema
 from execute_job import execute_mnist_job
 
@@ -31,7 +31,13 @@ def get_mnist_jobs():
     if not list_status:
         list_status = []
 
-    records = MnistJob.query.filter(MnistJob.status.in_(list_status)).all()
+    mnist_job_ids = JobStatus.query.filter(JobStatus.status.in_(list_status)).all()
+
+    list_id = [item.mnist_job_id for item in mnist_job_ids]
+
+    print(list_id)
+
+    records = MnistJob.query.filter(MnistJob.id.in_(list_id)).all()
     return jsonify([mnist_schema.dump(record) for record in records])
 
 
