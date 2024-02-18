@@ -1,5 +1,6 @@
 # npx create-react-app frontend
 # npm start
+npm --force install
 npm --force install bootstrap
 npm --force install react react-dom
 npm --force install react-bootstrap react-router-dom
