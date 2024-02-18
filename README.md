@@ -11,6 +11,11 @@ These instructions will get you a copy of the project up and running on your loc
 - Python
 - Node.js and npm
 
+### Set up separated environment (to avoid any conflict)
+
+Create new environment using python: `python -m venv <name>`
+Ex: `python -m venv testing_env`
+
 ### Installing
 
 1. Clone the repository: `git clone https://github.com/username/mnist_app.git`
