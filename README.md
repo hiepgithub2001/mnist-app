@@ -29,7 +29,7 @@ Ex: `python -m venv testing_env`
 #### Frontend
 
 1. Navigate to the frontend directory: `cd ../frontend`
-2. Install Node.js dependencies: `npm install `
+2. Install Node.js dependencies: `npm --force install `
 3. Install package: `frontend\run_dependencies.sh`
 
 ### Running the Application
