@@ -9,11 +9,9 @@ class MLModel(db.Model):
     _tablename_ = 'ml_model'
     id = db.Column(db.Integer, primary_key=True)
 
+    name = db.Column(db.String(256), nullable=False)
     model_script = db.Column(db.Text)
     hash = db.Column(db.Text)
-
-    related_mnist_job = db.relationship('MnistJob', backref='ml_model')
-
 
 class MnistJob(db.Model):
     _tablename_ = 'mnist_job'
@@ -24,7 +22,8 @@ class MnistJob(db.Model):
     result = db.Column(db.JSON)
 
     related_status = db.relationship("JobStatus", backref="mnist_job", uselist=False)
-    related_logs = db.relationship("JobLogging", backref="mnist_job")
+    related_logs = db.relationship("JobLogging", backref="mnist_job", uselist=False)
+    related_ml_model = db.relationship('MLModel')
 
 
 class JobLogging(db.Model):
@@ -33,13 +32,13 @@ class JobLogging(db.Model):
     mnist_job_id = db.Column(db.Integer,  db.ForeignKey('mnist_job.id'))
 
     batching = db.Column(db.Integer)
-    content = db.Column(db.String)
+    content = db.Column(db.TEXT)
 
 
 class JobStatus(db.Model):
     _tablename_ = 'job_status'
     id = db.Column(db.Integer, primary_key=True)
-    mnist_job_id = db.Column(db.Integer,  db.ForeignKey('mnist_job.id'))
+    mnist_job_id = db.Column(db.Integer,  db.ForeignKey('mnist_job.id'), unique=True)
 
     status = db.Column(db.String(256), default="PENDING")
     current_epoch = db.Column(db.Integer)

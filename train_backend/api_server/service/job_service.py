@@ -20,46 +20,12 @@ class JobService:
         self.model_repo = model_repo
         self.job_repo = job_repo
         self.publisher = mq_publisher
-
-    def submit_job(self, user_decoded_code : str, parameter : HyperParametersDTO):
-        md5_hash = self.get_MD5_hash(user_decoded_code)
-
-        if self.model_repo.get_model_by_hash(md5_hash) != None:
-            raise Exception("Duplicated model")
-        else:
-            ml_model = self.model_repo.add_model(user_decoded_code, md5_hash)
-            parameter_model = self.job_repo.create_model_config(
-                model_id=ml_model.id,
-                config=json.dumps(parameter.tojson()),
-                result=None
-            )
-
+    
+    def run_job(self, model_srcipt : str, mnist_job_config : HyperParametersDTO, mnist_job_id : int):
             message = {
-                'user_decoded_code' : user_decoded_code,
-                'paramter_id' : parameter_model.id,
-                'paramter' : parameter.tojson()
+                'user_decoded_code' : model_srcipt,
+                'paramter_id' : mnist_job_id,
+                'paramter' : mnist_job_config.tojson()
             }
 
             self.publisher.publish_job(json.dumps(message))
-    
-    def submit_param(self, user_model_id : int, parameter : HyperParametersDTO):
-        model = self.model_repo.get_model_by_id(user_model_id)
-
-        if model is None:
-            return
-        
-        user_decoded_code = base64.b64decode(model.model_script).decode()
-        parameter_model = self.job_repo.create_model_config(
-            learning_rate=parameter.lr,
-            num_epoch=parameter.epochs,
-            batch_size=parameter.batch_size,
-            drop_out=parameter.drop_out
-        )
-
-        return True
-    
-    def get_MD5_hash(self, user_decoded_code : str):
-        md5 = hashlib.md5()
-        md5.update(user_decoded_code.encode())
-
-        return md5.hexdigest()

@@ -28,7 +28,7 @@ class RMQLogger:
         return RMQLogger._instance
 
     def log(self, id : str, message: str):
-        logging.info(msg=f'[parameter_id {id}] ' + message)
+        logging.info(msg=f'[job_id ' + message)
         if (self.log_stack.get(id) is None) :
             self.log_stack[id] = []
 
@@ -38,7 +38,7 @@ class RMQLogger:
             self.flush_buffer(id)
 
     def error(self,id : str, e : Exception) :
-        logging.info(msg=f'[parameter_id {id}] ' + str(e))
+        logging.info(msg=f'[job_id {id}] ' + str(e))
 
         if (self.log_stack.get(id) is None) :
             self.log_stack[id] = []
@@ -60,7 +60,7 @@ class RMQLogger:
                 routing_key=self.queue_name, 
                 body=json.dumps(message)
             )
-            logging.info(f'Logs parameter_id {id} published to RabbitMQ')
+            logging.info(f'Logs job_id {id} published to RabbitMQ')
             self.log_stack[id].clear()
             self.update_batch_index(id)
     

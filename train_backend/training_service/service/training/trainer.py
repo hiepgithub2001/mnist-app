@@ -11,8 +11,8 @@ from dto.training_job_dto import ParamterDTO
 
 from service.logging.log import RMQLogger
 class Trainer:
-    def __init__(self, parameter_id : int, user_code_encode : str, parameter : ParamterDTO):
-        self.parameter_id = parameter_id
+    def __init__(self, job_id : int, user_code_encode : str, parameter : ParamterDTO):
+        self.job_id = job_id
         self.user_code_encode = user_code_encode
         self.parmeter = parameter
 
@@ -35,7 +35,7 @@ class Trainer:
             loss.backward()
             optimizer.step()
             if batch_idx % args.log_interval == 0:
-                RMQLogger.getInstance().log(self.parameter_id, 'Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
+                RMQLogger.getInstance().log(self.job_id, 'Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
                     epoch, batch_idx * len(data), len(train_loader.dataset),
                     100. * batch_idx / len(train_loader), loss.item()))
                 if args.dry_run:
@@ -55,7 +55,7 @@ class Trainer:
 
         test_loss /= len(test_loader.dataset)
 
-        RMQLogger.getInstance().log(self.parameter_id, '\nTest set: Average loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)\n'.format(
+        RMQLogger.getInstance().log(self.job_id, '\nTest set: Average loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)\n'.format(
             test_loss, correct, len(test_loader.dataset),
             100. * correct / len(test_loader.dataset)))
 
@@ -86,7 +86,7 @@ class Trainer:
                 scheduler.step()
             self.test(model, device, test_loader)
         except Exception as exception:
-            RMQLogger.getInstance().error(self.parameter_id, exception)
+            RMQLogger.getInstance().error(self.job_id, exception)
 
     def prepare_device_and_kwargs(self, args):
         train_kwargs = {'batch_size': args.batch_size}

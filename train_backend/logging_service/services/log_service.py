@@ -49,7 +49,7 @@ class LoggingService:
             else:
                 self.status_repo.create(
                     mnist_job_id=log_message.id,
-                    status='training',
+                    status='TRAINING',
                     current_epoch=cur_epoch,
                     progress=cur_progress,
                     loss=cur_loss
@@ -59,20 +59,21 @@ class LoggingService:
             parts = test_set_info.split(' ')
 
             average_loss = float(parts[4][:-1])
-            accuracy = float(parts[7][1:-3])
+            accuracy = float(parts[7][1:-2]) / 100
 
             result = {
                 'average_lost' : average_loss,
                 'accuracy' : accuracy
             }
+            print(result)
 
             latest_status = self.status_repo.get_by_param_id(log_message.id)
             if latest_status is not None:
-                latest_status.status = 'done'
+                latest_status.status = 'DONE'
                 self.status_repo.db.session.commit()
             
             self.mnist_job_repo.update_model_config(
-                parameter_id=log_message.id,
+                job_id=log_message.id,
                 config=None,
                 result=json.dumps(result)
             )

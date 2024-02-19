@@ -3,6 +3,6 @@ import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from config.env import POSTGERSS_DB, POSTGRESS_PASSWORD, POSTGRESS_PORT, POSTGRESS_HOST, POSTGRESS_USER
+from config.env import DB_NAME, DB_PASSWORD, DB_PORT, DB_HOST, DB_USER
 
-DATABASE_URL = f'postgresql+psycopg2://{POSTGRESS_USER}:{POSTGRESS_PASSWORD}@{POSTGRESS_HOST}:{POSTGRESS_PORT}/{POSTGERSS_DB}'
+DATABASE_URL = f'mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}'

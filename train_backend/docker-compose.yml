@@ -2,16 +2,15 @@ version: '3'
 
 services:
   database:
-    image: postgres:latest
-    container_name: database
+    image: mysql:8.0.19
+    restart: always
     environment:
-      POSTGRES_DB: my_database
-      POSTGRES_USER: my_user
-      POSTGRES_PASSWORD: my_password
+      MYSQL_ROOT_PASSWORD: my_password
+      MYSQL_USER: my_user
+      MYSQL_PASSWORD: my_password
+      MYSQL_DATABASE: my_database
     ports:
-      - "5432:5432"
-    volumes:
-      - ./database:/var/lib/postgresql/data
+      - "3306:3306"
 
   rabbitmq:
     image: rabbitmq:3-management

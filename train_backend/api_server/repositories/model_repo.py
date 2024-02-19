@@ -6,7 +6,7 @@ class MLModelRepository:
         self.db = db
 
     def add_model(self, model_script, hash_value):
-        model = MLModel(model_script=model_script, hash=hash_value)
+        model = MLModel(model_script=model_script, hash=hash_value, name='Test Name')
         self.db.session.add(model)
         self.db.session.commit()
         return model

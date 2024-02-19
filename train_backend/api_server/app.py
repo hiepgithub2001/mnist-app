@@ -13,10 +13,17 @@ from repositories.mnist_job_repo import MnistJobRepository
 from dto.submit_training_job_request import SubmitTrainingJob
 from dto.submit_parameter_req import SubmitParamter
 
+from controller.job_controller import job_controller
+
+from flask_cors import CORS
+
 import logging
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL
+CORS(app, supports_credentials=True)
+
+app.register_blueprint(job_controller)
 
 logging.basicConfig(level=logging.INFO)
 
@@ -56,5 +63,7 @@ if __name__ == '__main__':
             job_repo=job_repo,
             mq_publisher=mq_publiser
         )
+
+        app.config['JOB_SERVICE'] = job_service
 
         app.run(debug=True)

@@ -53,5 +53,5 @@ channel.basic_consume(
     auto_ack=True
 )
 
-channel.basic_qos(prefetch_count=1)
+channel.basic_qos(prefetch_count=2)
 channel.start_consuming()
