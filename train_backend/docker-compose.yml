@@ -1,0 +1,36 @@
+version: '3'
+
+services:
+  database:
+    image: mysql:8.0.19
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: my_password
+      MYSQL_USER: my_user
+      MYSQL_PASSWORD: my_password
+      MYSQL_DATABASE: my_database
+    ports:
+      - "3306:3306"
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "15672:15672" # RabbitMQ management UI
+      - "5672:5672"   # RabbitMQ main port
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    networks:
+      - tmsnet
+
+  training-services:
+    build:
+      context: .
+      dockerfile: training_service/Dockerfile
+
+    networks:
+      - tmsnet
+
+networks:
+  tmsnet:
+    driver: bridge
